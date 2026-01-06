@@ -98,16 +98,22 @@ function fixedWidthRangeFromMidpoint(midpoint: number): {
 }
 
 /**
- * Determine BAC band classification
+ * Determine BAC band classification based on 0.02 increments
  */
 function getBacBand(bac: number): BacBandKey {
-  if (bac < 0.01) return "sober";
-  if (bac < 0.03) return "minimal";
-  if (bac < 0.06) return "mild";
-  if (bac < 0.10) return "moderate";
-  if (bac < 0.15) return "high";
-  if (bac < 0.25) return "veryHigh";
-  return "dangerous";
+  if (bac < 0.01) return "baseline";
+  if (bac < 0.03) return "b01_02";
+  if (bac < 0.05) return "b03_04";
+  if (bac < 0.07) return "b05_06";
+  if (bac < 0.09) return "b07_08";
+  if (bac < 0.11) return "b09_10";
+  if (bac < 0.13) return "b11_12";
+  if (bac < 0.15) return "b13_14";
+  if (bac < 0.17) return "b15_16";
+  if (bac < 0.19) return "b17_18";
+  if (bac < 0.21) return "b19_20";
+  if (bac < 0.25) return "b21_24";
+  return "b25_plus";
 }
 
 /**
@@ -129,7 +135,7 @@ export function estimateBacRange(input: BacInput): BacResult {
       low: 0,
       high: 0,
       midpoint: 0,
-      bandKey: "sober",
+      bandKey: "baseline",
     };
   }
 

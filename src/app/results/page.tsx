@@ -10,6 +10,7 @@ import { getEffectsForBand } from "@/engine/effects";
 export default function ResultsPage() {
   const router = useRouter();
   const [data, setData] = useState<BacInput | null>(null);
+  const [sleepExpanded, setSleepExpanded] = useState(false);
 
   useEffect(() => {
     const storedData = localStorage.getItem("bacInputData");
@@ -163,11 +164,81 @@ export default function ResultsPage() {
               d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
             />
           </svg>
-          <div>
+          <div className="flex-1">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Sleep Impact
             </h3>
-            <p className="text-gray-700">{effects.sleepNote}</p>
+            <p className="text-gray-700 mb-3">{effects.sleepSummary}</p>
+
+            <button
+              onClick={() => setSleepExpanded(!sleepExpanded)}
+              className="text-purple-700 hover:text-purple-900 font-medium text-sm flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 rounded px-2 py-1 -ml-2"
+              aria-expanded={sleepExpanded}
+            >
+              {sleepExpanded ? "Less detail" : "More detail"}
+              <svg
+                className={`w-4 h-4 transition-transform ${sleepExpanded ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {sleepExpanded && (
+              <div className="mt-4 space-y-4 pt-4 border-t border-purple-300">
+                {/* Tonight Section */}
+                {effects.sleepTonight && effects.sleepTonight.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Tonight:</h4>
+                    <ul className="space-y-1.5 text-gray-700 text-sm">
+                      {effects.sleepTonight.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-purple-600 mt-1 flex-shrink-0">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Tomorrow Section */}
+                {effects.tomorrow && effects.tomorrow.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Tomorrow:</h4>
+                    <ul className="space-y-1.5 text-gray-700 text-sm">
+                      {effects.tomorrow.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-purple-600 mt-1 flex-shrink-0">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* What Helps Section */}
+                {effects.whatHelps && effects.whatHelps.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">What helps:</h4>
+                    <ul className="space-y-1.5 text-gray-700 text-sm">
+                      {effects.whatHelps.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-purple-600 mt-1 flex-shrink-0">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

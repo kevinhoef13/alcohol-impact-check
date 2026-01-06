@@ -5,13 +5,19 @@
 export type SexAtBirth = "male" | "female";
 
 export type BacBandKey =
-  | "sober"
-  | "minimal"
-  | "mild"
-  | "moderate"
-  | "high"
-  | "veryHigh"
-  | "dangerous";
+  | "baseline"
+  | "b01_02"
+  | "b03_04"
+  | "b05_06"
+  | "b07_08"
+  | "b09_10"
+  | "b11_12"
+  | "b13_14"
+  | "b15_16"
+  | "b17_18"
+  | "b19_20"
+  | "b21_24"
+  | "b25_plus";
 
 /**
  * Input parameters for BAC estimation
