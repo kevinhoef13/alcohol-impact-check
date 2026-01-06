@@ -1,0 +1,29 @@
+{
+  "name": "Alcohol Impact - Educational Resource",
+  "short_name": "Alcohol Impact",
+  "description": "Learn about alcohol's effects on the body and mind. Educational information for informed decisions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "education", "lifestyle"],
+  "dir": "ltr",
+  "lang": "en-US",
+  "scope": "/",
+  "prefer_related_applications": false
+}
