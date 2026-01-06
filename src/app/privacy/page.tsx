@@ -36,7 +36,7 @@ export default function PrivacyPage() {
           <section className="card">
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">Information We Do NOT Collect</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
-              We want to be clear about what we don't collect:
+              We want to be clear about what we don&apos;t collect:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
               <li>No personal identifying information (name, email, phone number, etc.)</li>
@@ -54,8 +54,8 @@ export default function PrivacyPage() {
               Since all data is stored locally on your device, you have complete control:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-              <li>Use the "Clear Data" button on the results page</li>
-              <li>Clear your browser's local storage for this site</li>
+              <li>Use the &quot;Clear Data&quot; button on the results page</li>
+              <li>Clear your browser&apos;s local storage for this site</li>
               <li>Uninstall the PWA or clear browser cache</li>
             </ul>
           </section>
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
           <section className="card">
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">Changes to This Policy</h2>
             <p className="text-gray-700 leading-relaxed">
-              If we make changes to this privacy policy, we will update the "Last Updated" date at the top of this page. Since we don't collect contact information, we cannot notify you directly of changes. We encourage you to review this policy periodically.
+              If we make changes to this privacy policy, we will update the &quot;Last Updated&quot; date at the top of this page. Since we don&apos;t collect contact information, we cannot notify you directly of changes. We encourage you to review this policy periodically.
             </p>
           </section>
 

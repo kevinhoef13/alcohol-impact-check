@@ -61,7 +61,7 @@ export default function TermsPage() {
               To the fullest extent permitted by law:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-              <li>This application is provided "as is" without warranties of any kind</li>
+              <li>This application is provided &quot;as is&quot; without warranties of any kind</li>
               <li>We do not warrant the accuracy, completeness, or usefulness of information</li>
               <li>We are not liable for any decisions made based on information in this app</li>
               <li>We are not responsible for any damages arising from use of this application</li>
@@ -138,7 +138,7 @@ export default function TermsPage() {
                 <li>Assess fitness for safety-sensitive activities</li>
               </ul>
               <p className="font-semibold mt-4">
-                If you are concerned about your alcohol use, please contact a healthcare provider, counselor, or support service. Resources like SAMHSA's National Helpline (1-800-662-4357) are available 24/7.
+                If you are concerned about your alcohol use, please contact a healthcare provider, counselor, or support service. Resources like SAMHSA&apos;s National Helpline (1-800-662-4357) are available 24/7.
               </p>
             </div>
           </section>

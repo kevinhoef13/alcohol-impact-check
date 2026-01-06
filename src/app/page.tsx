@@ -6,7 +6,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-          Understand Alcohol's Impact
+          Understand Alcohol&apos;s Impact
         </h1>
         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
           Evidence-based information to help you make informed decisions about alcohol consumption and its effects on health.
@@ -48,7 +48,7 @@ export default function Home() {
 
       {/* Educational Content */}
       <section className="card mb-12">
-        <h2 className="text-2xl font-semibold mb-4">What You'll Learn</h2>
+        <h2 className="text-2xl font-semibold mb-4">What You&apos;ll Learn</h2>
         <ul className="space-y-3">
           <li className="flex items-start gap-3">
             <svg className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -75,10 +75,10 @@ export default function PausePage() {
           </svg>
           <div>
             <p className="text-blue-900 font-semibold mb-1">
-              Remember: This is not a tool for deciding when it's safe to drive
+              Remember: This is not a tool for deciding when it&apos;s safe to drive
             </p>
             <p className="text-blue-800 text-sm">
-              If you've been drinking, don't drive. Plan for safe transportation regardless of how you feel.
+              If you&apos;ve been drinking, don&apos;t drive. Plan for safe transportation regardless of how you feel.
             </p>
           </div>
         </div>
@@ -130,10 +130,10 @@ export default function PausePage() {
             </svg>
             <div>
               <h3 className="text-lg font-semibold text-green-900 mb-1">
-                You've checked in
+                You&apos;ve checked in
               </h3>
               <p className="text-green-800">
-                You've thought through the important aspects of your safety and wellbeing. Continue to check in with yourself throughout the evening.
+                You&apos;ve thought through the important aspects of your safety and wellbeing. Continue to check in with yourself throughout the evening.
               </p>
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function PausePage() {
               />
             </svg>
             <span className="text-gray-700">
-              It's always okay to stop drinking or leave if you're uncomfortable
+              It&apos;s always okay to stop drinking or leave if you&apos;re uncomfortable
             </span>
           </li>
           <li className="flex items-start gap-3">
@@ -273,7 +273,7 @@ export default function PausePage() {
           In Case of Emergency
         </h3>
         <p className="text-red-800 text-sm mb-3">
-          If you or someone you're with shows signs of alcohol poisoning (confusion, vomiting, seizures, slow breathing, unconsciousness), call 911 immediately.
+          If you or someone you&apos;re with shows signs of alcohol poisoning (confusion, vomiting, seizures, slow breathing, unconsciousness), call 911 immediately.
         </p>
         <p className="text-red-800 text-sm font-semibold">
           Emergency: 911

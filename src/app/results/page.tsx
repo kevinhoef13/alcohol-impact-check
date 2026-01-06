@@ -63,7 +63,7 @@ export default function ResultsPage() {
               Do not use this to decide about driving
             </p>
             <p className="text-red-800">
-              If you've been drinking, don't drive. This estimate cannot determine if it's safe to operate a vehicle or machinery.
+              If you&apos;ve been drinking, don&apos;t drive. This estimate cannot determine if it&apos;s safe to operate a vehicle or machinery.
             </p>
           </div>
         </div>
@@ -300,7 +300,7 @@ export default function ResultsPage() {
               />
             </svg>
             <span className="text-gray-800">
-              Always arrange for safe transportation if you've been drinking.
+              Always arrange for safe transportation if you&apos;ve been drinking.
             </span>
           </li>
           <li className="flex items-start gap-3">
