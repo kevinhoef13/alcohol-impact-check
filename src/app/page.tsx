@@ -29,6 +29,7 @@ export default function Home() {
 
   // UI state
   const [sleepExpanded, setSleepExpanded] = useState(false);
+  const [effectsExpanded, setEffectsExpanded] = useState(false);
   const [methodologyExpanded, setMethodologyExpanded] = useState(false);
 
   // Load from localStorage on mount
@@ -94,6 +95,7 @@ export default function Home() {
     const bacResult = estimateBacRange(input);
     setResult(bacResult);
     setSleepExpanded(false);
+    setEffectsExpanded(false);
     // Scroll to results
     setTimeout(() => {
       document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
@@ -367,7 +369,7 @@ export default function Home() {
           {/* Typical Effects */}
           <div className="card">
             <h3 className="text-xl font-semibold text-gray-900 mb-3">
-              Typical Effects
+              Typical Effects ({effects.label})
             </h3>
             <ul className="space-y-2">
               {effects.effects.map((effect, idx) => (
@@ -377,6 +379,40 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+
+            <button
+              onClick={() => setEffectsExpanded(!effectsExpanded)}
+              className="text-primary-700 hover:text-primary-900 font-medium text-sm flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1 -ml-2 mt-3"
+              aria-expanded={effectsExpanded}
+            >
+              {effectsExpanded ? "Less detail" : "More detail"}
+              <svg
+                className={`w-4 h-4 transition-transform ${effectsExpanded ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {effectsExpanded && effects.effectsDetail && effects.effectsDetail.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <ul className="space-y-2">
+                  {effects.effectsDetail.map((detail, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700 text-sm">
+                      <span className="text-primary-600 mt-1 flex-shrink-0">•</span>
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Sleep Impact */}

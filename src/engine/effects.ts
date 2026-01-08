@@ -7,6 +7,7 @@ import { BacBandKey } from "./types";
 export interface BacEffects {
   label: string;
   effects: string[];
+  effectsDetail: string[];
   sleepSummary: string;
   sleepTonight: string[];
   tomorrow: string[];
@@ -24,6 +25,12 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "No measurable alcohol effects typically present",
       "Cognitive and motor functions may remain at baseline",
       "Normal physiological state is maintained",
+    ],
+    effectsDetail: [
+      "Attention and focus typically remain sharp",
+      "Physical coordination is generally unaffected",
+      "Decision-making processes operate normally",
+      "Mood and emotional regulation may be stable",
     ],
     sleepSummary: "Sleep quality is typically not affected by alcohol at this level.",
     sleepTonight: [
@@ -47,6 +54,12 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Slight relaxation or mood changes may occur",
       "Motor and cognitive functions typically remain intact",
     ],
+    effectsDetail: [
+      "Body temperature may feel slightly warmer",
+      "Social ease or comfort may increase subtly",
+      "Reaction times remain largely normal",
+      "Self-awareness and perception are typically unaffected",
+    ],
     sleepSummary: "Sleep may experience minimal changes in some individuals.",
     sleepTonight: [
       "Sleep onset may be slightly easier for some people",
@@ -69,6 +82,13 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Mild relaxation and mild euphoria may be experienced",
       "Inhibitions may begin to lower slightly",
       "Concentration may be minimally affected in some tasks",
+    ],
+    effectsDetail: [
+      "Social confidence may feel enhanced",
+      "Minor tasks requiring focus may take slightly longer",
+      "Mood may become more elevated or positive",
+      "Fine motor control typically remains functional",
+      "Judgment in low-stakes situations may be subtly affected",
     ],
     sleepSummary: "Sleep architecture may show slight changes, with minor disruptions possible.",
     sleepTonight: [
@@ -95,6 +115,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Coordination and reaction time often begin to decline",
       "Social behavior and talkativeness typically increase",
     ],
+    effectsDetail: [
+      "Risk assessment may become less accurate",
+      "Balance and steadiness may show subtle changes",
+      "Inhibitions around social interaction often decrease",
+      "Complex problem-solving abilities may be reduced",
+      "Emotional responses may be more pronounced",
+      "Vision tracking and focus may become slightly impaired",
+    ],
     sleepSummary: "Sleep disruption becomes more common, with REM sleep often reduced.",
     sleepTonight: [
       "Sleep onset may be faster, but overall quality often suffers",
@@ -119,6 +147,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Motor control and balance may be moderately affected",
       "Reasoning and memory formation often show impairment",
       "Reaction times typically slow noticeably",
+    ],
+    effectsDetail: [
+      "Walking may require more focus and attention",
+      "Short-term memory formation may be compromised",
+      "Speech may become less precise or slightly slurred",
+      "Self-control and impulse regulation often decrease",
+      "Peripheral vision and depth perception may be affected",
+      "Processing speed for information typically slows",
     ],
     sleepSummary: "Sleep quality often suffers, with reduced REM sleep and more frequent awakenings.",
     sleepTonight: [
@@ -146,6 +182,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Fine motor skills and coordination are typically impaired",
       "Judgment and self-control often deteriorate significantly",
     ],
+    effectsDetail: [
+      "Complex motor tasks become significantly more difficult",
+      "Emotional volatility may increase noticeably",
+      "Attention span and focus are often substantially reduced",
+      "Risk-taking behaviors may become more common",
+      "Memory gaps for events during this period may occur later",
+      "Balance and gait typically show clear impairment",
+    ],
     sleepSummary: "Sleep architecture is typically disrupted with poor overall sleep quality.",
     sleepTonight: [
       "You may fall asleep quickly but wake frequently",
@@ -171,6 +215,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Gross motor skills may be significantly compromised",
       "Memory formation often becomes impaired",
       "Emotional regulation typically decreases",
+    ],
+    effectsDetail: [
+      "Standing and walking without support may be challenging",
+      "Blackout periods (memory loss) may begin to occur",
+      "Nausea and dizziness are increasingly common",
+      "Reaction times are severely slowed",
+      "Confusion and disorientation may be present",
+      "Decision-making capacity is typically severely impaired",
     ],
     sleepSummary: "Deep and REM sleep stages are often significantly reduced, with next-day fatigue common.",
     sleepTonight: [
@@ -198,6 +250,13 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Reaction time is typically severely slowed",
       "Vision may be affected, including blurred or double vision",
     ],
+    effectsDetail: [
+      "Physical assistance may be needed for safe movement",
+      "Memory blackouts become more likely",
+      "Nausea and vomiting are common",
+      "Comprehension and communication are typically impaired",
+      "Risk of injury from falls increases substantially",
+    ],
     sleepSummary: "Sleep is often heavily disrupted with minimal restorative value.",
     sleepTonight: [
       "Sleep may be extremely fragmented and unrefreshing",
@@ -223,6 +282,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Gross motor impairment is typically severe",
       "Blackout periods (memory loss) may begin to occur",
       "Nausea and vomiting often become more likely",
+    ],
+    effectsDetail: [
+      "Standing or walking may be impossible without assistance",
+      "Awareness and consciousness may be intermittent",
+      "Risk of choking on vomit becomes a serious concern",
+      "Vital signs may show changes (heart rate, breathing)",
+      "Complete memory loss for this period is common",
+      "Medical attention may be advisable",
     ],
     sleepSummary: "Loss of consciousness may occur rather than natural sleep.",
     sleepTonight: [
@@ -250,6 +317,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Confusion and disorientation are often present",
       "Risk of injury from falls typically increases substantially",
     ],
+    effectsDetail: [
+      "Loss of consciousness may occur at any moment",
+      "Breathing may become shallow or irregular",
+      "Pain response and reflexes are often significantly dulled",
+      "Temperature regulation is typically impaired",
+      "Someone should stay with you to monitor your safety",
+      "Medical evaluation may be warranted",
+    ],
     sleepSummary: "Consciousness may be difficult to maintain; this is severe intoxication rather than healthy sleep.",
     sleepTonight: [
       "You may lose consciousness rather than sleep naturally",
@@ -275,6 +350,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Mental confusion and stupor are typically severe",
       "Blackouts and memory loss often occur",
       "Physical assistance may be required for basic functions",
+    ],
+    effectsDetail: [
+      "Unresponsiveness or near-unresponsiveness is common",
+      "Breathing and heart rate may be dangerously affected",
+      "Risk of aspiration (choking on vomit) is very high",
+      "Hypothermia risk increases significantly",
+      "You should not be alone at this level",
+      "Emergency medical care should be strongly considered",
     ],
     sleepSummary: "Loss of consciousness is common at this level; medical attention may be appropriate.",
     sleepTonight: [
@@ -302,6 +385,14 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Loss of consciousness may happen at any time",
       "Medical supervision is often advisable at this level",
     ],
+    effectsDetail: [
+      "Respiratory depression becomes a significant risk",
+      "Gag reflex may be suppressed or absent",
+      "Body temperature regulation is often severely impaired",
+      "Seizure risk may be elevated",
+      "Continuous monitoring by another person is essential",
+      "This level warrants immediate medical evaluation",
+    ],
     sleepSummary: "This represents a medical concern rather than sleep; close monitoring is recommended.",
     sleepTonight: [
       "Unconsciousness or unresponsiveness is very likely",
@@ -327,6 +418,13 @@ export const BAC_EFFECTS_MAP: Record<BacBandKey, BacEffects> = {
       "Life-threatening complications may occur including respiratory depression",
       "Loss of consciousness and unresponsiveness are common",
       "Immediate medical attention is typically necessary",
+    ],
+    effectsDetail: [
+      "Respiratory arrest (stopped breathing) may occur",
+      "Heart rate may become dangerously slow or irregular",
+      "Coma is a significant risk at this level",
+      "Death from alcohol poisoning is possible",
+      "This is a medical emergency—call 911 immediately",
     ],
     sleepSummary: "This is a medical emergency requiring immediate professional care.",
     sleepTonight: [
