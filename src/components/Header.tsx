@@ -5,7 +5,7 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200">
       <nav className="container mx-auto px-4 py-3">
         <Link href="/" className="text-lg font-bold text-primary-700">
-          Alcohol Impact Estimator
+          Alcohol Impact Check
         </Link>
       </nav>
     </header>

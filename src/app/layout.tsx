@@ -7,15 +7,15 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Alcohol Impact - Educational Resource",
-  description: "Learn about alcohol's effects on the body and mind. Educational information for informed decisions.",
+  title: "Alcohol Impact Check",
+  description: "Estimate blood alcohol content and learn about alcohol's effects on sleep and health.",
   manifest: "/manifest.json",
   themeColor: "#0284c7",
   viewport: "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Alcohol Impact",
+    title: "Alcohol Impact Check",
   },
 };
 

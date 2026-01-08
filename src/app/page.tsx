@@ -5,14 +5,6 @@ import { BacInput, BacResult, SexAtBirth } from "@/engine/types";
 import { estimateBacRange } from "@/engine/bac";
 import { getEffectsForBand } from "@/engine/effects";
 
-const PAUSE_CHECKLIST_ITEMS = [
-  "I have a plan for getting home safely",
-  "I know my limits and intend to stick to them",
-  "I&apos;ve eaten food and am staying hydrated",
-  "I&apos;m with people I trust",
-  "I have my phone charged and accessible",
-];
-
 /**
  * Clamp a number between min and max (inclusive)
  */
@@ -21,34 +13,45 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export default function Home() {
-  // Input state
+  // Input state - numeric (source of truth for calculation)
   const [standardDrinks, setStandardDrinks] = useState<number>(2);
   const [durationHours, setDurationHours] = useState<number>(2);
   const [weightLbs, setWeightLbs] = useState<number>(160);
   const [sexAtBirth, setSexAtBirth] = useState<SexAtBirth>("male");
+
+  // Input state - text (for number input display/editing)
+  const [drinksText, setDrinksText] = useState<string>("2");
+  const [hoursText, setHoursText] = useState<string>("2");
+  const [weightText, setWeightText] = useState<string>("160");
 
   // Result state
   const [result, setResult] = useState<BacResult | null>(null);
 
   // UI state
   const [sleepExpanded, setSleepExpanded] = useState(false);
-  const [pauseChecklist, setPauseChecklist] = useState<boolean[]>(
-    new Array(PAUSE_CHECKLIST_ITEMS.length).fill(false)
-  );
+  const [methodologyExpanded, setMethodologyExpanded] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
     const storedInputs = localStorage.getItem("bacInputs");
     const storedResult = localStorage.getItem("bacResult");
-    const storedPause = localStorage.getItem("pauseChecklist");
 
     if (storedInputs) {
       try {
         const inputs = JSON.parse(storedInputs);
-        setStandardDrinks(inputs.standardDrinks || 2);
-        setDurationHours(inputs.durationHours || 2);
-        setWeightLbs(inputs.weightLbs || 160);
+        const drinks = inputs.standardDrinks || 2;
+        const hours = inputs.durationHours || 2;
+        const weight = inputs.weightLbs || 160;
+
+        setStandardDrinks(drinks);
+        setDurationHours(hours);
+        setWeightLbs(weight);
         setSexAtBirth(inputs.sexAtBirth || "male");
+
+        // Sync text states
+        setDrinksText(String(drinks));
+        setHoursText(String(hours));
+        setWeightText(String(weight));
       } catch (e) {
         // Ignore parse errors
       }
@@ -57,14 +60,6 @@ export default function Home() {
     if (storedResult) {
       try {
         setResult(JSON.parse(storedResult));
-      } catch (e) {
-        // Ignore parse errors
-      }
-    }
-
-    if (storedPause) {
-      try {
-        setPauseChecklist(JSON.parse(storedPause));
       } catch (e) {
         // Ignore parse errors
       }
@@ -89,11 +84,6 @@ export default function Home() {
     }
   }, [result]);
 
-  // Save pause checklist to localStorage
-  useEffect(() => {
-    localStorage.setItem("pauseChecklist", JSON.stringify(pauseChecklist));
-  }, [pauseChecklist]);
-
   const handleCalculate = () => {
     const input: BacInput = {
       standardDrinks,
@@ -110,12 +100,6 @@ export default function Home() {
     }, 100);
   };
 
-  const togglePauseItem = (index: number) => {
-    const newChecklist = [...pauseChecklist];
-    newChecklist[index] = !newChecklist[index];
-    setPauseChecklist(newChecklist);
-  };
-
   const effects = result ? getEffectsForBand(result.bandKey) : null;
 
   return (
@@ -123,7 +107,7 @@ export default function Home() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-          Alcohol Impact Estimator
+          Alcohol Impact Check
         </h1>
         <p className="text-gray-600">
           Estimate BAC and understand potential effects
@@ -174,17 +158,25 @@ export default function Home() {
                 min="0.5"
                 max="30"
                 step="0.5"
-                value={standardDrinks}
+                value={drinksText}
                 onChange={(e) => {
+                  // Always update text state
+                  setDrinksText(e.target.value);
+                  // If parseable, update numeric state
                   const val = parseFloat(e.target.value);
                   if (!isNaN(val)) {
                     setStandardDrinks(clamp(val, 0.5, 30));
                   }
                 }}
-                onBlur={(e) => {
-                  const val = parseFloat(e.target.value);
-                  if (isNaN(val)) {
-                    setStandardDrinks(0.5);
+                onBlur={() => {
+                  // On blur, normalize text to match clamped numeric
+                  const val = parseFloat(drinksText);
+                  if (isNaN(val) || drinksText.trim() === "") {
+                    // Revert to current numeric
+                    setDrinksText(String(standardDrinks));
+                  } else {
+                    // Normalize to clamped value
+                    setDrinksText(String(clamp(val, 0.5, 30)));
                   }
                 }}
                 className="w-20 px-2 py-1 border border-gray-300 rounded text-center text-sm font-semibold"
@@ -196,7 +188,11 @@ export default function Home() {
               max="30"
               step="0.5"
               value={standardDrinks}
-              onChange={(e) => setStandardDrinks(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const val = parseFloat(e.target.value);
+                setStandardDrinks(val);
+                setDrinksText(String(val));
+              }}
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
             />
             <p className="text-xs text-gray-500 mt-1">
@@ -215,17 +211,25 @@ export default function Home() {
                 min="0.5"
                 max="20"
                 step="0.5"
-                value={durationHours}
+                value={hoursText}
                 onChange={(e) => {
+                  // Always update text state
+                  setHoursText(e.target.value);
+                  // If parseable, update numeric state
                   const val = parseFloat(e.target.value);
                   if (!isNaN(val)) {
                     setDurationHours(clamp(val, 0.5, 20));
                   }
                 }}
-                onBlur={(e) => {
-                  const val = parseFloat(e.target.value);
-                  if (isNaN(val)) {
-                    setDurationHours(0.5);
+                onBlur={() => {
+                  // On blur, normalize text to match clamped numeric
+                  const val = parseFloat(hoursText);
+                  if (isNaN(val) || hoursText.trim() === "") {
+                    // Revert to current numeric
+                    setHoursText(String(durationHours));
+                  } else {
+                    // Normalize to clamped value
+                    setHoursText(String(clamp(val, 0.5, 20)));
                   }
                 }}
                 className="w-20 px-2 py-1 border border-gray-300 rounded text-center text-sm font-semibold"
@@ -237,7 +241,11 @@ export default function Home() {
               max="20"
               step="0.5"
               value={durationHours}
-              onChange={(e) => setDurationHours(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const val = parseFloat(e.target.value);
+                setDurationHours(val);
+                setHoursText(String(val));
+              }}
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
             />
           </div>
@@ -253,17 +261,25 @@ export default function Home() {
                 min="70"
                 max="450"
                 step="1"
-                value={weightLbs}
+                value={weightText}
                 onChange={(e) => {
-                  const val = Number(e.target.value);
+                  // Always update text state
+                  setWeightText(e.target.value);
+                  // If parseable, update numeric state
+                  const val = parseFloat(e.target.value);
                   if (!isNaN(val)) {
                     setWeightLbs(Math.round(clamp(val, 70, 450)));
                   }
                 }}
-                onBlur={(e) => {
-                  const val = Number(e.target.value);
-                  if (isNaN(val)) {
-                    setWeightLbs(70);
+                onBlur={() => {
+                  // On blur, normalize text to match clamped numeric
+                  const val = parseFloat(weightText);
+                  if (isNaN(val) || weightText.trim() === "") {
+                    // Revert to current numeric
+                    setWeightText(String(weightLbs));
+                  } else {
+                    // Normalize to clamped value
+                    setWeightText(String(Math.round(clamp(val, 70, 450))));
                   }
                 }}
                 className="w-20 px-2 py-1 border border-gray-300 rounded text-center text-sm font-semibold"
@@ -275,7 +291,11 @@ export default function Home() {
               max="450"
               step="1"
               value={weightLbs}
-              onChange={(e) => setWeightLbs(Number(e.target.value))}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setWeightLbs(val);
+                setWeightText(String(val));
+              }}
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
             />
           </div>
@@ -499,64 +519,108 @@ export default function Home() {
               </li>
             </ul>
           </div>
-        </div>
-      )}
 
-      {/* Pause & Decide Checklist - Always Visible */}
-      <div className="card mt-8 bg-green-50 border-2 border-green-200">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Pause & Decide
-        </h2>
-        <p className="text-gray-700 mb-4">
-          Take a moment to check in with yourself:
-        </p>
-        <div className="space-y-3">
-          {PAUSE_CHECKLIST_ITEMS.map((item, idx) => (
-            <label
-              key={idx}
-              className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-green-100 transition-colors"
-            >
-              <input
-                type="checkbox"
-                checked={pauseChecklist[idx]}
-                onChange={() => togglePauseItem(idx)}
-                className="w-5 h-5 mt-0.5 text-green-600 rounded focus:ring-green-500 cursor-pointer"
-              />
-              <span
-                className="text-gray-800"
-                dangerouslySetInnerHTML={{ __html: item }}
-              />
-            </label>
-          ))}
-        </div>
+          {/* Methodology Section */}
+          <div className="card bg-blue-50 border-2 border-blue-200">
+            <div className="flex items-start gap-4">
+              <svg
+                className="w-8 h-8 text-blue-600 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  How This Works
+                </h3>
+                <p className="text-gray-700 mb-3">
+                  This tool uses a modified Widmark formula with distributed consumption modeling to estimate blood alcohol content.
+                </p>
 
-        {pauseChecklist.every((item) => item) && (
-          <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-lg flex items-start gap-3">
-            <svg
-              className="w-6 h-6 text-green-700 flex-shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <div>
-              <h3 className="text-lg font-semibold text-green-900 mb-1">
-                You&apos;ve checked in
-              </h3>
-              <p className="text-green-800">
-                You&apos;ve thought through the important aspects of your safety and
-                wellbeing. Continue to check in with yourself throughout the evening.
-              </p>
+                <button
+                  onClick={() => setMethodologyExpanded(!methodologyExpanded)}
+                  className="text-blue-700 hover:text-blue-900 font-medium text-sm flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 -ml-2"
+                  aria-expanded={methodologyExpanded}
+                >
+                  {methodologyExpanded ? "Less detail" : "More detail"}
+                  <svg
+                    className={`w-4 h-4 transition-transform ${methodologyExpanded ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {methodologyExpanded && (
+                  <div className="mt-4 space-y-4 pt-4 border-t border-blue-300 text-sm">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1.5">Standard Drink Definition</h4>
+                      <p className="text-gray-700">
+                        One standard drink contains 14 grams of pure alcohol. This equals approximately 12oz of beer (5% ABV), 5oz of wine (12% ABV), or 1.5oz of distilled spirits (40% ABV).
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1.5">Body Water Distribution (Widmark r-values)</h4>
+                      <p className="text-gray-700">
+                        Alcohol distributes in body water. Males typically have 68% body water (r = 0.68), females 55% (r = 0.55). This accounts for differences in body composition between sexes.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1.5">Distributed Consumption Model</h4>
+                      <p className="text-gray-700">
+                        We assume drinks are consumed gradually over the time period, not all at once. Metabolism begins during consumption, so the effective metabolism time is approximately half the total duration.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1.5">Absorption Efficiency (90%)</h4>
+                      <p className="text-gray-700">
+                        Not all consumed alcohol enters the bloodstream due to first-pass metabolism in the stomach and liver. We apply a 90% absorption efficiency factor.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1.5">Metabolism Rate Range</h4>
+                      <p className="text-gray-700">
+                        The body metabolizes alcohol at 0.012–0.018% BAC per hour. Individual rates vary based on genetics, liver health, food intake, and other factors. We use this range to provide an estimated BAC range.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1.5">Individual Variability</h4>
+                      <p className="text-gray-700">
+                        Many factors affect actual BAC: recent food intake, hydration, medications, genetics, liver health, tolerance, and more. This tool provides a general estimate and cannot account for all individual factors.
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-blue-200">
+                      <p className="text-gray-800 font-medium">
+                        <strong>Important:</strong> This is an educational estimate only. It is not suitable for making decisions about driving, operating machinery, or legal matters. When in doubt, don&apos;t drive.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Disclaimer */}
       <div className="mt-8 text-center text-sm text-gray-500">
