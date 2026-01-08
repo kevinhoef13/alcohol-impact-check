@@ -13,6 +13,13 @@ const PAUSE_CHECKLIST_ITEMS = [
   "I have my phone charged and accessible",
 ];
 
+/**
+ * Clamp a number between min and max (inclusive)
+ */
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
 export default function Home() {
   // Input state
   const [standardDrinks, setStandardDrinks] = useState<number>(2);
@@ -170,8 +177,14 @@ export default function Home() {
                 value={standardDrinks}
                 onChange={(e) => {
                   const val = parseFloat(e.target.value);
-                  if (!isNaN(val) && val >= 0.5 && val <= 30) {
-                    setStandardDrinks(val);
+                  if (!isNaN(val)) {
+                    setStandardDrinks(clamp(val, 0.5, 30));
+                  }
+                }}
+                onBlur={(e) => {
+                  const val = parseFloat(e.target.value);
+                  if (isNaN(val)) {
+                    setStandardDrinks(0.5);
                   }
                 }}
                 className="w-20 px-2 py-1 border border-gray-300 rounded text-center text-sm font-semibold"
@@ -205,8 +218,14 @@ export default function Home() {
                 value={durationHours}
                 onChange={(e) => {
                   const val = parseFloat(e.target.value);
-                  if (!isNaN(val) && val >= 0.5 && val <= 20) {
-                    setDurationHours(val);
+                  if (!isNaN(val)) {
+                    setDurationHours(clamp(val, 0.5, 20));
+                  }
+                }}
+                onBlur={(e) => {
+                  const val = parseFloat(e.target.value);
+                  if (isNaN(val)) {
+                    setDurationHours(0.5);
                   }
                 }}
                 className="w-20 px-2 py-1 border border-gray-300 rounded text-center text-sm font-semibold"
@@ -225,16 +244,38 @@ export default function Home() {
 
           {/* Weight */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Body Weight: {weightLbs} lbs
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">
+                Body Weight (lbs)
+              </label>
+              <input
+                type="number"
+                min="70"
+                max="450"
+                step="1"
+                value={weightLbs}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (!isNaN(val)) {
+                    setWeightLbs(Math.round(clamp(val, 70, 450)));
+                  }
+                }}
+                onBlur={(e) => {
+                  const val = Number(e.target.value);
+                  if (isNaN(val)) {
+                    setWeightLbs(70);
+                  }
+                }}
+                className="w-20 px-2 py-1 border border-gray-300 rounded text-center text-sm font-semibold"
+              />
+            </div>
             <input
               type="range"
               min="70"
               max="450"
               step="1"
               value={weightLbs}
-              onChange={(e) => setWeightLbs(parseInt(e.target.value))}
+              onChange={(e) => setWeightLbs(Number(e.target.value))}
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
             />
           </div>
