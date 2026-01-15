@@ -358,11 +358,6 @@ export default function Home() {
               <div className="text-sm text-gray-700 mb-1">
                 Midpoint: {result.midpoint.toFixed(2)}%
               </div>
-              <div className="inline-block bg-white px-4 py-2 rounded-lg mt-2">
-                <div className="text-lg font-semibold text-gray-900">
-                  {effects.label}
-                </div>
-              </div>
             </div>
           </div>
 
@@ -385,7 +380,7 @@ export default function Home() {
               className="text-primary-700 hover:text-primary-900 font-medium text-sm flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1 -ml-2 mt-3"
               aria-expanded={effectsExpanded}
             >
-              {effectsExpanded ? "Less detail" : "More detail"}
+              {effectsExpanded ? "Less detail" : "More detail on effects"}
               <svg
                 className={`w-4 h-4 transition-transform ${effectsExpanded ? "rotate-180" : ""}`}
                 fill="none"
@@ -620,7 +615,7 @@ export default function Home() {
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1.5">Distributed Consumption Model</h4>
                       <p className="text-gray-700">
-                        We assume drinks are consumed gradually over the time period, not all at once. Metabolism begins during consumption, so the effective metabolism time is approximately half the total duration.
+                        We assume drinks are consumed gradually over the time period, not all at once. Metabolism begins during consumption, so the effective metabolism time is approximately half the total duration. Peak BAC is adjusted downward because drinking over time results in lower peak levels than instant consumption (calibrated to NIAAA benchmarks: 4-5 drinks over 2 hours ≈ 0.08%).
                       </p>
                     </div>
 

@@ -22,9 +22,27 @@ const STANDARD_DRINK_GRAMS = 14;
  * Using a range to account for individual variation
  */
 const METABOLISM_RATE = {
-  low: 0.012, // Slower metabolism
-  high: 0.018, // Faster metabolism
+  low: 0.010, // Slower metabolism
+  high: 0.020, // Faster metabolism
 } as const;
+
+/**
+ * Absorption efficiency factor
+ * Not all alcohol consumed is fully absorbed (first-pass metabolism, etc.)
+ */
+const ABSORPTION_EFFICIENCY = 0.9;
+
+/**
+ * Absorption lag time (hours)
+ * Time before alcohol begins to be absorbed into the bloodstream
+ */
+const ABSORPTION_LAG_HOURS = 0.5;
+
+/**
+ * Distributed consumption peak dampening factor
+ * Peak BAC is lower when drinks are spread over time vs instant consumption
+ */
+const DISTRIBUTED_PEAK_FACTOR = 0.65;
 
 /**
  * Convert pounds to kilograms
@@ -120,11 +138,17 @@ function getBacBand(bac: number): BacBandKey {
  * Estimate BAC range based on input parameters
  *
  * Accounts for:
+ * - Distributed consumption over time period (drinks consumed gradually)
+ * - Absorption efficiency (not all alcohol fully absorbed)
  * - Individual variation in metabolism rates
- * - Time elapsed since drinking
  * - Body weight and biological sex differences
  *
  * Returns a fixed 0.02-wide range centered on the metabolism-based midpoint
+ *
+ * Example sanity test:
+ * - 14 drinks over 7.5 hours, 161 lbs, male
+ * - Should produce lower midpoint than instant consumption model
+ * - Distributed model accounts for metabolism during drinking period
  */
 export function estimateBacRange(input: BacInput): BacResult {
   const { standardDrinks, durationHours, weightLbs, sexAtBirth } = input;
@@ -139,21 +163,30 @@ export function estimateBacRange(input: BacInput): BacResult {
     };
   }
 
-  // Calculate total alcohol consumed
-  const totalAlcoholGrams = standardDrinks * STANDARD_DRINK_GRAMS;
+  // Calculate total alcohol consumed with absorption efficiency
+  const totalAlcoholGrams = standardDrinks * STANDARD_DRINK_GRAMS * ABSORPTION_EFFICIENCY;
   const weightKg = lbsToKg(weightLbs);
   const rValue = WIDMARK_R[sexAtBirth];
 
-  // Calculate peak BAC (assuming all alcohol absorbed)
-  const peakBac = calculatePeakBac(totalAlcoholGrams, weightKg, rValue);
+  // Calculate theoretical peak BAC (instant consumption baseline)
+  const theoreticalPeak = calculatePeakBac(totalAlcoholGrams, weightKg, rValue);
 
-  // Calculate BAC range accounting for metabolism over time
+  // Distributed consumption: BAC peak is lower when drinks spread over time
+  // Factor calibrated against NIAAA benchmarks (4-5 drinks/2h ≈ 0.08%)
+  const peakBac = theoreticalPeak * DISTRIBUTED_PEAK_FACTOR;
+
+  // Effective metabolism time: durationHours / 2 - absorption lag
+  // Rationale: on average, alcohol was consumed at midpoint of time period
+  // so metabolism occurs for approximately half the duration, minus absorption lag
+  const effectiveMetabolismHours = Math.max(0, (durationHours / 2) - ABSORPTION_LAG_HOURS);
+
+  // Calculate BAC range accounting for metabolism over effective time
   // High BAC estimate: slower metabolism
-  const metabolizedSlow = durationHours * METABOLISM_RATE.low;
+  const metabolizedSlow = effectiveMetabolismHours * METABOLISM_RATE.low;
   const bacHigh = clampBac(peakBac - metabolizedSlow);
 
   // Low BAC estimate: faster metabolism
-  const metabolizedFast = durationHours * METABOLISM_RATE.high;
+  const metabolizedFast = effectiveMetabolismHours * METABOLISM_RATE.high;
   const bacLow = clampBac(peakBac - metabolizedFast);
 
   // Calculate midpoint from metabolism-based estimates
