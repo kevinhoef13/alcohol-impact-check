@@ -1,7 +1,7 @@
 {
-  "name": "Alcohol Impact - Educational Resource",
-  "short_name": "Alcohol Impact",
-  "description": "Learn about alcohol's effects on the body and mind. Educational information for informed decisions.",
+  "name": "Alcohol Impact Check",
+  "short_name": "Impact Check",
+  "description": "Estimate blood alcohol content and learn about alcohol's effects on sleep and health.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
